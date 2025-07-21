@@ -1,6 +1,6 @@
 # Visual Acuity Converter
 
-This is a simple and intuitive web tool designed for ophthalmologists, optometrists, and vision specialists. It allows quick conversion between different visual acuity notations and provides functional classification and aid suggestions based on WHO ICD-10 criteria. It also includes a Teller Acuity Cards module for preverbal children.
+This is a simple and intuitive web tool designed for ophthalmologists and vision specialists. It allows quick conversion between different visual acuity notations and provides functional classification and aid suggestions based on WHO ICD-10 criteria. It also includes a Teller Acuity Cards module for preverbal children.
 
 ## 🔧 Features
 
