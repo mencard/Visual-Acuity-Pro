@@ -61,6 +61,12 @@
 
     <label for="jInput">Enter Jaeger (J) number (e.g., 4)</label>
     <input type="number" id="jInput" placeholder="e.g., 4">
+
+    <label for="nearDistance">Reading distance</label>
+    <select id="nearDistance">
+      <option value="0.4">40 cm</option>
+      <option value="0.2">20 cm</option>
+    </select>
   </div>
 
   <button onclick="convertAcuity()">Convert</button>
@@ -123,7 +129,7 @@
         snellen20 = `20/${Math.round(20 / decimal)}`;
         snellen6 = `6/${Math.round(6 / decimal)}`;
 
-        let mEquivalent = (1 / decimal).toFixed(1);
+        let mEquivalent = (0.4 / decimal).toFixed(1); // asumimos lectura a 40 cm
         let jEquivalent = Object.entries(jaegerToM).find(([j, m]) => Math.abs(m - mEquivalent) < 0.3);
 
         let classification = "";
@@ -153,7 +159,7 @@
           • Snellen (20 ft): ${snellen20}<br>
           • Snellen (6 m): ${snellen6}<br>
           • Extra letters: ${extraLetters > 0 ? '+' + extraLetters : extraLetters}<br><br>
-          • Estimated near VA: M ${mEquivalent}${jEquivalent ? ` (J${jEquivalent[0]})` : ''}<br><br>
+          • Estimated near VA at 40 cm: M ${mEquivalent}${jEquivalent ? ` (J${jEquivalent[0]})` : ''}<br><br>
           <strong>ICD-10 Classification:</strong><br>
           • ${classification}<br><br>
           <strong>Recommended Aids:</strong><br>
@@ -198,19 +204,20 @@
       if (mode === 'near') {
         const m = parseFloat(document.getElementById('mInput').value);
         const j = parseInt(document.getElementById('jInput').value);
+        const nearDistance = parseFloat(document.getElementById('nearDistance').value);
         let resultText = '<strong>Near Vision Conversion:</strong><br>';
 
         if (m) {
-          const decimal = 1 / m;
+          const decimal = nearDistance / m;
           const logMAR = -Math.log10(decimal);
           const snellen = `20/${Math.round(20 / decimal)}`;
-          resultText += `• M: ${m.toFixed(2)}<br>• logMAR: ${logMAR.toFixed(2)}<br>• Snellen (20 ft): ${snellen}`;
+          resultText += `• M: ${m.toFixed(2)}<br>• Distance: ${nearDistance * 100} cm<br>• logMAR: ${logMAR.toFixed(2)}<br>• Snellen (20 ft): ${snellen}`;
         } else if (j && jaegerToM[j]) {
           const mVal = jaegerToM[j];
-          const decimal = 1 / mVal;
+          const decimal = nearDistance / mVal;
           const logMAR = -Math.log10(decimal);
           const snellen = `20/${Math.round(20 / decimal)}`;
-          resultText += `• J${j} ≈ M ${mVal}<br>• logMAR: ${logMAR.toFixed(2)}<br>• Snellen (20 ft): ${snellen}`;
+          resultText += `• J${j} ≈ M ${mVal}<br>• Distance: ${nearDistance * 100} cm<br>• logMAR: ${logMAR.toFixed(2)}<br>• Snellen (20 ft): ${snellen}`;
         } else {
           resultText = "Please enter a valid M or Jaeger value.";
         }
